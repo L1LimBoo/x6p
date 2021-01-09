@@ -8,11 +8,10 @@
         <!-- 中间主体 -->
         <a-row>
             <!-- 元素栏 -->
-            <a-col :span="6">
-            </a-col>
+            <a-col :span="6"> </a-col>
             <!-- 画布 -->
             <a-col :span="12">
-                <Flow></Flow>
+                <Flow @getGraph="getGraph" />
             </a-col>
             <!-- 详情和缩略图 -->
             <a-col :span="6">
@@ -27,19 +26,19 @@
 import Flow from "./module/Flow/Flow";
 
 export default {
-    name: "X6Topo",
     data() {
         return {};
     },
     components: {
         Flow,
     },
-    method:{
-        
-    }
+    methods: {
+        getGraph(val) {
+            console.log(val);
+        },
+    },
 };
 </script>
 
 <style lang='less' scoped>
-
 </style>

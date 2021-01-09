@@ -6,7 +6,6 @@
 import { Graph, Addon, Shape } from "@antv/x6";
 
 export default {
-    name: "flow",
     data() {
         return {
             graph: null,
@@ -43,16 +42,15 @@ export default {
     mounted() {
         console.log("initGraph");
         this.initGraph();
+        this.pushDataToIndex(this.graph);
     },
     watch: {
-        //graph变化了就向外传出graph
-        graph: {
-            handler: function (val) {
-                console.log(val);
-            },
-            deep: true, //检测内部属性
-            immediate: true, //立即触发回调
+        handler: function (val) {
+            console.log("graph", val);
+            this.pushDataToIndex(val);
         },
+        deep: true,
+        immediate: true,
     },
     methods: {
         initGraph() {
@@ -69,6 +67,14 @@ export default {
                 },
             });
             this.graph.fromJSON(this.testData);
+        },
+        //向父组件推送数据
+        pushDataToIndex(val) {
+            if (val) {
+                this.$emit("getGraph", val);
+            }else{
+                console.error('graph无数据')
+            }
         },
     },
 };
