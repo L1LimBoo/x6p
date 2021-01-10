@@ -1,10 +1,8 @@
 <template>
     <div ref="detail" class="detail">
         <h1>节点信息</h1>
-        <h2>model</h2>
-        <div>{{cell.attrs.label}}</div>
-        <h2>data</h2>
-        <div>{{ JSON.stringify(cell.data) }}</div>
+        <h2>label</h2>
+        <a-input v-model="label" />
     </div>
 </template>
 
@@ -13,16 +11,25 @@ export default {
     data() {
         return {
             cell: {},
+            label: "",
         };
     },
     props: ["graph"],
     mounted() {
         this.graph.on("cell:click", ({ e, x, y, cell, view }) => {
             console.log("cell-detail:", cell);
+            // cell.attr("body/stroke", "orange");
+            this.label = cell.attrs.label.text
             this.cell = cell;
         });
     },
-    methods: {},
+    watch:{
+        label(val){
+            this.cell.setAttrs({
+                label:{text:val}
+            })
+        }
+    }
 };
 </script>
 

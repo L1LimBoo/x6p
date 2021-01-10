@@ -12,7 +12,7 @@ const rectBase = new Shape.Rect({
         },
         label: {
             text: 'aqua',
-            fill: 'white',
+            fill: 'black',
         },
     },
     //数据
