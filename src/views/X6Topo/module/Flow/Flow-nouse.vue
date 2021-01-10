@@ -1,4 +1,5 @@
 <template>
+    <!-- 废弃 -->
     <div id="flow" ref="flow"></div>
 </template>
 
@@ -42,15 +43,6 @@ export default {
     mounted() {
         console.log("initGraph");
         this.initGraph();
-        this.pushDataToIndex(this.graph);
-    },
-    watch: {
-        handler: function (val) {
-            console.log("graph", val);
-            this.pushDataToIndex(val);
-        },
-        deep: true,
-        immediate: true,
     },
     methods: {
         initGraph() {
@@ -67,14 +59,6 @@ export default {
                 },
             });
             this.graph.fromJSON(this.testData);
-        },
-        //向父组件推送数据
-        pushDataToIndex(val) {
-            if (val) {
-                this.$emit("getGraph", val);
-            }else{
-                console.error('graph无数据')
-            }
         },
     },
 };
