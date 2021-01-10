@@ -1,14 +1,14 @@
 <template>
     <div id="stencliBox">
-        <div id="dnd">
-            <a-card @click="cardClick"> this is node </a-card>
-        </div>
         <div ref="stencli"></div>
     </div>
 </template>
 
 <script>
+//载入x6的组件
 import { Graph, Addon, Shape } from "@antv/x6";
+//载入节点
+import { rects, images } from "../../nodes/index";
 
 export default {
     data() {
@@ -23,8 +23,8 @@ export default {
                     collapsable: true,
                     collapsed: false,
                     graphWidth: 200,
-                    graphHeight: 400,
-                    graphPadding: 10,
+                    graphHeight: 200,
+                    graphPadding: 5,
                 },
                 {
                     name: "group2",
@@ -32,8 +32,8 @@ export default {
                     collapsable: true,
                     collapsed: false,
                     graphWidth: 200,
-                    graphHeight: 400,
-                    graphPadding: 10,
+                    graphHeight: 200,
+                    graphPadding: 5,
                 },
             ],
         };
@@ -41,13 +41,12 @@ export default {
     props: ["graph"],
     mounted() {
         this.initStencli();
-        this.dnd = new Addon.Dnd({
-            target: this.graph,
-        });
+        // this.dnd = new Addon.Dnd({
+        //     target: this.graph,
+        // });
     },
     methods: {
         initStencli() {
-            //节点
             //创建 Stencil 的选项继承自创建 Dnd 的选项！！！！
             this.stencli = new Addon.Stencil({
                 target: this.graph,
@@ -56,36 +55,11 @@ export default {
                 search: true,
                 collapsable: false,
             });
-            const rect = new Shape.Rect({
-                id: "node1",
-                x: 40,
-                y: 40,
-                width: 100,
-                height: 40,
-                label: "rect",
-                zIndex: 2,
-            });
             //把stencli放到网页上
             this.$refs.stencli.appendChild(this.stencli.container);
             //挂载模板节点，必须在stencli挂载到网页上以后操作
-            this.stencli.load([rect], "group1");
-        },
-        cardClick(e) {
-            const r1 = this.graph.createNode({
-                width: 100,
-                height: 100,
-                attrs: {
-                    label: {
-                        text: "Rect",
-                        fill: "#6a6c8a",
-                    },
-                    body: {
-                        stroke: "#31d0c6",
-                        strokeWidth: 5,
-                    },
-                },
-            });
-            this.dnd.start(r1, e);
+            this.stencli.load([rects.rectBase], "group1");
+            this.stencli.load([images.computer1], "group2");
         },
     },
     watch: {
