@@ -18,8 +18,8 @@
             <!-- 详情和小地图 -->
             <a-col :span="6">
                 <!-- 详情 -->
+                <Detail v-if="graphFinish" :graph="graph" />
                 <!-- 小地图 -->
-                <!-- <Minimap v-if="graphFinish" :graph="graph"/> -->
                 <div ref="minimap"></div>
             </a-col>
         </a-row>
@@ -29,6 +29,7 @@
 <script>
 import Stencli from "./module/Stencli/Stencli";
 import Minimap from "./module/Minimap/Minimap";
+import Detail from "./module/Detail/Detail";
 
 import { Graph, Addon, Shape } from "@antv/x6";
 
@@ -48,6 +49,7 @@ export default {
     components: {
         Stencli,
         Minimap,
+        Detail,
     },
     mounted() {
         this.initGraph();
@@ -76,9 +78,9 @@ export default {
             });
             this.graph.fromJSON(this.testData);
             //事件
-            this.graph.on("cell:click", ({ e, x, y, cell, view }) => {
-                console.log("cell:", cell);
-            });
+            // this.graph.on("cell:click", ({ e, x, y, cell, view }) => {
+            //     console.log("cell:", cell);
+            // });
             this.graphFinish = true;
         },
     },
