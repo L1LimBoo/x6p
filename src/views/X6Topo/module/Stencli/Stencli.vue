@@ -8,7 +8,7 @@
 //载入x6的组件
 import { Graph, Addon, Shape } from "@antv/x6";
 //载入节点
-import { rects, images } from "../../nodes/index";
+import { rects, images,switchNodes } from "../../nodes/index";
 
 export default {
     data() {
@@ -58,7 +58,7 @@ export default {
             //把stencli放到网页上
             this.$refs.stencli.appendChild(this.stencli.container);
             //挂载模板节点，必须在stencli挂载到网页上以后操作
-            this.stencli.load([rects.rectBase], "group1");
+            this.stencli.load([rects.rectBase,switchNodes.switchNode], "group1");
             this.stencli.load([images.computer1], "group2");
         },
     },

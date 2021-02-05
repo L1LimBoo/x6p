@@ -16,20 +16,57 @@ export default {
     },
     props: ["graph"],
     mounted() {
-        this.graph.on("cell:click", ({ e, x, y, cell, view }) => {
+        this.graph.on("node:click", ({ e, x, y, cell, view }) => {
             console.log("cell-detail:", cell);
-            // cell.attr("body/stroke", "orange");
-            this.label = cell.attrs.label.text
+            this.reset();
+            cell.attr("body/stroke", "orange");
+            this.label = cell.attrs.label.text;
             this.cell = cell;
         });
+        this.graph.on("edge:click", ({ edge }) => {
+            this.reset();
+            edge.attr("line/stroke", "orange");
+            edge.prop("labels/0", {
+                attrs: {
+                    body: {
+                        stroke: "orange",
+                    },
+                },
+            });
+        });
+        this.graph.on("blank:click", () => {
+            this.reset();
+        });
     },
-    watch:{
-        label(val){
+    methods: {
+        reset() {
+            const nodes = this.graph.getNodes();
+            nodes.forEach((node) => {
+                node.attr("body/stroke", "#000");
+            });
+
+            const edges = this.graph.getEdges();
+            edges.forEach((edge) => {
+                edge.attr("line/stroke", "black");
+                edge.prop("labels/0", {
+                    attrs: {
+                        body: {
+                            stroke: "black",
+                        },
+                    },
+                });
+            });
+        },
+    },
+    watch: {
+        label(val) {
             this.cell.setAttrs({
-                label:{text:val}
-            })
-        }
-    }
+                label: {
+                    text: val,
+                },
+            });
+        },
+    },
 };
 </script>
 

@@ -53,6 +53,8 @@ export default {
     },
     mounted() {
         this.initGraph();
+        this.groupTest();
+        this.switchTest(this.graph);
     },
     methods: {
         initGraph() {
@@ -77,12 +79,100 @@ export default {
                 },
             });
             this.graph.fromJSON(this.testData);
-            //事件
-            // this.graph.on("cell:click", ({ e, x, y, cell, view }) => {
-            //     console.log("cell:", cell);
-            // });
+
             this.graphFinish = true;
         },
+        //测试group
+        groupTest() {
+            const child = this.graph.addNode({
+                x: 120,
+                y: 80,
+                width: 120,
+                height: 60,
+                zIndex: 10,
+                label: "child",
+                attrs: {
+                    body: {
+                        fill: "green",
+                    },
+                    label: {
+                        fill: "#fff",
+                    },
+                },
+            });
+
+            const parent = this.graph.addNode({
+                x: 80,
+                y: 40,
+                width: 320,
+                height: 240,
+                zIndex: 1,
+                label: "Parent",
+                ports: {
+                    groups: {
+                        group1: {
+                            attrs: {
+                                circle: {
+                                    r: 16,
+                                    magnet: true,
+                                    stroke: "#31d0c6",
+                                    strokeWidth: 2,
+                                    fill: "#fff",
+                                },
+                            },
+                        },
+                    },
+                    items: [
+                        {
+                            id: "port1",
+                            group: "group1", // 指定分组名称
+                        },
+                        {
+                            id: "port2",
+                            group: "group1", // 指定分组名称
+                        },
+                        {
+                            id: "port3",
+                            group: "group1", // 指定分组名称
+                        },
+                    ],
+                },
+            });
+
+            parent.addChild(child);
+        },
+        //测试switch
+        switchTest(graph) {
+            const switchCenter = {
+                x: 35,
+                y: -2,
+            };
+            const switchOpen = `rotate(-30 ${switchCenter.x} ${switchCenter.y})`;
+            const switchClose = `rotate(-12 ${switchCenter.x} ${switchCenter.y})`;
+            graph.on("node:click", ({ node }) => {
+                if (node.attrs.switch) {
+                    const attrPath = "attrs/switch/transform";
+                    const current = node.prop(attrPath);
+                    const target =
+                        current === switchOpen ? switchClose : switchOpen;
+                    node.transition(attrPath, target, {
+                        interp: (a, b) => {
+                            const reg = /-?\d+/g;
+                            const start = parseInt(a.match(reg)[0], 10);
+                            const end = parseInt(b.match(reg)[0], 10);
+                            const d = end - start;
+                            return (t) => {
+                                return `rotate(${start + d * t} ${
+                                    switchCenter.x
+                                } ${switchCenter.y})`;
+                            };
+                        },
+                    });
+                }
+            });
+        },
+        //测试注册
+        
     },
     watch: {
         graph: {

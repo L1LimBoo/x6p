@@ -9,11 +9,55 @@ const rectBase = new Shape.Rect({
     attrs: {
         body: {
             fill: 'aqua',
+            stroke: 'black'
         },
         label: {
             text: 'aqua',
             fill: 'black',
         },
+    },
+    //连接桩
+    ports: {
+        groups: {
+            top: {
+                position:'top',
+                attrs: {
+                    circle: {
+                        r: 6,
+                        magnet: true,
+                        stroke: '#31d0c6',
+                        strokeWidth: 2,
+                        fill: '#fff',
+                    },
+                }
+            },
+            right:{
+                position:'right',
+                attrs: {
+                    circle: {
+                        r: 6,
+                        magnet: true,
+                        stroke: '#31d0c6',
+                        strokeWidth: 2,
+                        fill: '#fff',
+                    },
+                }
+            }
+        },
+        items: [
+            {
+                id: 'port1',
+                group: "top",
+            },
+            {
+                id: 'port2',
+                group: "top"
+            },
+            {
+                id: 'port3',
+                group: "right"
+            },
+        ]
     },
     //数据
     data: {
