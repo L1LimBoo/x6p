@@ -32,6 +32,7 @@ import Minimap from "./module/Minimap/Minimap";
 import Detail from "./module/Detail/Detail";
 
 import { Graph, Addon, Shape } from "@antv/x6";
+import { setGroupTranslating } from "./group/group.js";
 
 export default {
     data() {
@@ -44,6 +45,33 @@ export default {
                 edges: [],
             },
             graphFinish: false,
+            //画布配置，限制子节点位置
+            translating: {
+                restrict(view) {
+                    const cell = view.cell;
+                    if (cell.isNode()) {
+                        const parent = cell.getParent();
+                        if (parent) {
+                            return parent.getBBox();
+                        }
+                    }
+                },
+            },
+            embedding: {
+                enabled: true,
+                findParent({ node }) {
+                    const bbox = node.getBBox();
+                    return this.getNodes().filter((node) => {
+                        // 只有 data.parent 为 true 的节点才是父节点
+                        const data = node.getData();
+                        if (data && data.parent) {
+                            const targetBBox = node.getBBox();
+                            return bbox.isIntersectWithRect(targetBBox);
+                        }
+                        return false;
+                    });
+                },
+            },
         };
     },
     components: {
@@ -77,6 +105,8 @@ export default {
                     enabled: true,
                     container: this.$refs.minimap,
                 },
+                //限制子节点移动
+                translating: this.translating,
             });
             this.graph.fromJSON(this.testData);
 
@@ -171,8 +201,6 @@ export default {
                 }
             });
         },
-        //测试注册
-        
     },
     watch: {
         graph: {

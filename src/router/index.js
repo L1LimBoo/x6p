@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import x6p from '../views/X6Topo/index.vue'
+import test from '../views/Test.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
