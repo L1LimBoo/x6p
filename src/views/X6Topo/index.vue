@@ -1,28 +1,35 @@
 <template>
     <main>
-        <!-- 顶部第一行 -->
-        <a-row style="height: 50px; border: 2px solid black">
-            <!-- 工具栏 -->
-            工具栏
-        </a-row>
-        <!-- 中间主体 -->
-        <a-row>
-            <!-- 元素栏 -->
-            <a-col :span="6">
-                <Stencli v-if="graphFinish" :graph="graph" />
-            </a-col>
-            <!-- 画布 -->
-            <a-col :span="12">
-                <div id="flow" ref="flow"></div>
-            </a-col>
-            <!-- 详情和小地图 -->
-            <a-col :span="6">
-                <!-- 详情 -->
-                <Detail v-if="graphFinish" :graph="graph" />
-                <!-- 小地图 -->
-                <div ref="minimap"></div>
-            </a-col>
-        </a-row>
+        <a-layout>
+            <a-layout-header
+                ><!-- 顶部第一行 -->
+                <a-row style="height: 50px; border: 2px solid black">
+                    <!-- 工具栏 -->
+                    工具栏
+                </a-row></a-layout-header
+            >
+            <a-layout-content>
+                <!-- 中间主体 -->
+                <a-row>
+                    <!-- 元素栏 -->
+                    <a-col :span="6">
+                        <Stencli v-if="graphFinish" :graph="graph" />
+                    </a-col>
+                    <!-- 画布 -->
+                    <a-col :span="12">
+                        <div id="flow" ref="flow"></div>
+                    </a-col>
+                    <!-- 详情和小地图 -->
+                    <a-col :span="6">
+                        <!-- 详情 -->
+                        <Detail v-if="graphFinish" :graph="graph" />
+                        <!-- 小地图 -->
+                        <div ref="minimap"></div>
+                    </a-col>
+                </a-row>
+            </a-layout-content>
+            <a-layout-footer>FOOTER</a-layout-footer>
+        </a-layout>
     </main>
 </template>
 
@@ -213,4 +220,11 @@ export default {
 </script>
 
 <style lang='less' scoped>
+main {
+    height: 100%;
+
+    .ant-layout {
+        height: 100%;
+    }
+}
 </style>
