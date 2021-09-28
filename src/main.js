@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Test from './views/Test.vue'
+import Test from './views/Test/index.vue'
 
 //引入antd
 import 'ant-design-vue/dist/antd.css'

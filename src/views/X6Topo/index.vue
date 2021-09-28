@@ -87,125 +87,65 @@ export default {
         Detail,
     },
     mounted() {
-        this.initGraph();
-        this.groupTest();
-        this.switchTest(this.graph);
+        this.initGraph().then((graph) => {
+            this.graph = graph;
+            this.edgeTest(graph);
+            graph.centerContent();
+        });
     },
     methods: {
         initGraph() {
-            this.graph = new Graph({
-                container: this.$refs.flow,
-                width: 800,
-                height: 800,
-                background: {
-                    color: "#fffbe6", //背景色
-                },
-                grid: {
-                    size: 20, //网格大小
-                    visible: true, //显示网格
-                },
-                //小地图配置:scroller.enabled为true才能开启小地图
-                scroller: {
-                    enabled: true,
-                },
-                minimap: {
-                    enabled: true,
-                    container: this.$refs.minimap,
-                },
-                //限制子节点移动
-                translating: this.translating,
-            });
-            this.graph.fromJSON(this.testData);
-
-            this.graphFinish = true;
-        },
-        //测试group
-        groupTest() {
-            const child = this.graph.addNode({
-                x: 120,
-                y: 80,
-                width: 120,
-                height: 60,
-                zIndex: 10,
-                label: "child",
-                attrs: {
-                    body: {
-                        fill: "green",
-                    },
-                    label: {
-                        fill: "#fff",
-                    },
-                },
-            });
-
-            const parent = this.graph.addNode({
-                x: 80,
-                y: 40,
-                width: 320,
-                height: 240,
-                zIndex: 1,
-                label: "Parent",
-                ports: {
-                    groups: {
-                        group1: {
-                            attrs: {
-                                circle: {
-                                    r: 16,
-                                    magnet: true,
-                                    stroke: "#31d0c6",
-                                    strokeWidth: 2,
-                                    fill: "#fff",
-                                },
-                            },
+            return new Promise((resolve, reject) => {
+                try {
+                    const graph = new Graph({
+                        container: this.$refs.flow,
+                        width: 800,
+                        height: 800,
+                        background: {
+                            color: "#fffbe6", //背景色
                         },
-                    },
-                    items: [
-                        {
-                            id: "port1",
-                            group: "group1", // 指定分组名称
+                        grid: {
+                            size: 20, //网格大小
+                            visible: true, //显示网格
                         },
-                        {
-                            id: "port2",
-                            group: "group1", // 指定分组名称
+                        //小地图配置:scroller.enabled为true才能开启小地图
+                        scroller: {
+                            enabled: false,
                         },
-                        {
-                            id: "port3",
-                            group: "group1", // 指定分组名称
+                        minimap: {
+                            enabled: false,
+                            container: this.$refs.minimap,
                         },
-                    ],
-                },
-            });
-
-            parent.addChild(child);
-        },
-        //测试switch
-        switchTest(graph) {
-            const switchCenter = {
-                x: 35,
-                y: -2,
-            };
-            const switchOpen = `rotate(-30 ${switchCenter.x} ${switchCenter.y})`;
-            const switchClose = `rotate(-12 ${switchCenter.x} ${switchCenter.y})`;
-            graph.on("node:click", ({ node }) => {
-                if (node.attrs.switch) {
-                    const attrPath = "attrs/switch/transform";
-                    const current = node.prop(attrPath);
-                    const target =
-                        current === switchOpen ? switchClose : switchOpen;
-                    node.transition(attrPath, target, {
-                        interp: (a, b) => {
-                            const reg = /-?\d+/g;
-                            const start = parseInt(a.match(reg)[0], 10);
-                            const end = parseInt(b.match(reg)[0], 10);
-                            const d = end - start;
-                            return (t) => {
-                                return `rotate(${start + d * t} ${
-                                    switchCenter.x
-                                } ${switchCenter.y})`;
-                            };
+                        //限制子节点移动
+                        translating: this.translating,
+                        //调整节点大小
+                        resizing: true,
+                        //缩放
+                        mousewheel: {
+                            enabled: true,
+                        },
+                        //画布平移
+                        panning: {
+                            enabled: true,
                         },
                     });
+                    resolve(graph);
+                } catch (error) {
+                    reject(error);
                 }
+            });
+        },
+        //测试线
+        edgeTest(graph) {
+            graph.addEdge({
+                source: { x: 200, y: 200 },
+                traget: { x: 400, y: 400 },
+                attrs: {
+                    line: {
+                        sourceMarker: "classic",
+                        targetMarker: "circle",
+                    },
+                },
             });
         },
     },
